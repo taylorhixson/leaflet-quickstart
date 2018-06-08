@@ -21,15 +21,15 @@
 
 // Intialize the map as the variable "map"
 // This also hides the + / - zoom controls.
-// const map = L.map("mapdiv", { zoomControl: false });
+const map = L.map("mapdiv", { zoomControl: false });
 
 // Set a center point and zoom level for it:
-// const vingtNeufRueDUlm = L.latLng([48.843495, 2.344888]);
-// const zoomLevel = 17;
+const vingtNeufRueDUlm = L.latLng([48.843495, 2.344888]);
+const zoomLevel = 17;
 
 // Now set the view of the map and add a tile layer:
-// map.setView(vingtNeufRueDUlm, zoomLevel);
-// L.tileLayer.provider("Stamen.Watercolor").addTo(map);
+map.setView(vingtNeufRueDUlm, zoomLevel);
+L.tileLayer.provider("Stamen.Toner").addTo(map);
 
 // If you prefer a different tile layer, see your options here:
 // https://leaflet-extras.github.io/leaflet-providers/preview/
@@ -38,14 +38,14 @@
 // "OpenStreetMap.Mapnik" or "Stamen.Toner"
 
 // Add a marker for where we're at:
-// const vingtNeufMarker = L.marker(vingtNeufRueDUlm).addTo(map);
+//const vingtNeufMarker = L.marker(vingtNeufRueDUlm).addTo(map);
 
 // Now add a popup to it:
-// vingtNeufMarker.bindPopup("<h3>Hello from 29 rue d’Ulm!</h3>");
+//vingtNeufMarker.bindPopup("<h3>Hello from 29 rue d’Ulm!</h3>");
 
 // Use Markdown, instead:
-// const md = markdownit({html: true}).use(markdownitFootnote);
-// vingtNeufMarker.bindPopup(md.render("### Hello from 29 rue d’Ulm and the [NYU/PSL Workshop](https://wp.nyu.edu/nyupslgeo/workshop/)!"));
+const md = markdownit({html: true}).use(markdownitFootnote);
+//vingtNeufMarker.bindPopup(md.render("### Hello from 29 rue d’Ulm and the [NYU/PSL Workshop](https://wp.nyu.edu/nyupslgeo/workshop/)!"));
 
 // Use d3 to parse the places.csv csv file.
 //
@@ -58,7 +58,6 @@
 // That gives us a new object that we call "list." It's not an Array, but it
 // behaves somewhat like one. The last member, however, is the header row.
 
-/*
 d3.csv("places.csv", data => {
   return {
     nom: data.nom,
@@ -91,19 +90,18 @@ d3.csv("places.csv", data => {
         break;
       }
       // And then we use the other properties to make add a circle marker to the map.
-      L.circleMarker([place.latitude, place.longitude],
-        { fillColor: color, color: color }
-      ).bindPopup(`<h3><a href="${place.lien}">${place.nom}</a></h3>`).addTo(map);
+      //L.circleMarker([place.latitude, place.longitude],
+      //        { fillColor: color, color: color }
+      //    ).bindPopup(`<h3><a href="${place.lien}">${place.nom}</a></h3>`).addTo(map);
       // Alternatively, we can use icons from font-awesome.
-      // L.marker([place.latitude, place.longitude],
-      //   { icon: L.divIcon(
-      //     { html: `<i style="color: ${color}" class="fa fa-${icon}"></i>`, iconSize: [30, 30] }
-      //   )}
-      // ).bindTooltip(place.nom).addTo(map);
+      L.marker([place.latitude, place.longitude],
+        { icon: L.divIcon(
+          { html: `<i style="color: ${color}" class="fa fa-${icon}"></i>`, iconSize: [30, 30] }
+        )}
+      ).bindTooltip(place.nom).addTo(map);
     }
   });
 });
-*/
 
 // Alternatively, we can contact a server and ask data from it.
 //
@@ -161,24 +159,27 @@ $.getJSON(velibStationUrl, stationData => {
 
 // Or, we can use $.getJSON() on our own file of the Parisian Arrondisements.
 
-/*
+
+
 $.getJSON("paris_arr.geojson", geodata => {
   L.geoJSON(geodata, {
     style() {
       return {
         color: "#ff0000",
-        weight: 5,
-        fillOpacity: 0.0
+        weight: 2.5,
+        fillOpacity: 0.2
       };
     }
+  }).bindTooltip( layer => {
+    return layer.feature.properties["L_AR"];
   }).addTo(map);
 });
-*/
 
 // Use jQuery to manipulate the html elements.
 // Change the card header:
-// $("#card-header-text").html("<strong>Workshop à rue d’Ulm</strong>");
+$("#card-header-text").html("<strong>Workshop à rue d’Ulm</strong>");
 
-// Change the card body to the body.md file: $.ajax({ url: "body.md",
-// success(bodyMarkdown) {
-// $("#outlet-card-body").html(md.render(bodyMarkdown)); } });
+// Change the card body to the body.md file:
+$.ajax({ url: "body.md",
+  success(bodyMarkdown) {
+    $("#outlet-card-body").html(md.render(bodyMarkdown)); } });
